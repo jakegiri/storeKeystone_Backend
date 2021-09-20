@@ -11,13 +11,10 @@ import { currentTimeStamp } from "../lib/util/currentTimeStamp";
 
 export const User = list({
   access: {
-    operation: {
-      query: accessControls.operationLevel.canManageUsers,
+    filter: {
+      query: accessControls.filterLevel.canManageUsers,
+      update: accessControls.filterLevel.canManageUsers,
     },
-    // filter: {
-    //   query: accessControls.filterLevel.canManageUsers,
-    //   update: accessControls.filterLevel.canManageUsers,
-    // },
   },
   fields: {
     email: text({ isRequired: true, isIndexed: "unique", isFilterable: true }),
