@@ -27,8 +27,14 @@ class AccessControls {
 
   filterLevel = {
     canManageUsers: ({ session }: ListAccessArgs) => {
-      console.log(session?.itemId);
-      return { id: session?.itemId };
+      // Is Signed In?
+      if (!this.isSignedIn({ session })) return false;
+
+      // Do they have permission to manageRole?
+      if (this.operationLevel.canManageUsers({ session })) return true;
+
+      // IF not , do they own this item?
+      return { id: { equals: session?.itemId } };
     },
   };
 }
