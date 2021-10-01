@@ -6,7 +6,7 @@ export const Role = list({
   fields: {
     name: text({ isRequired: true }),
     ...permissionFields,
-    assignedTo: relationship({
+    user: relationship({
       ref: "User.role",
       many: true,
     }),

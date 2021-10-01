@@ -1,4 +1,4 @@
-import { PermissionName } from "./schema/fields/permissionFields";
+import { PermissionName } from "./schemas/fields/permissionFields";
 import { KeystoneContext } from "@keystone-next/keystone/types";
 //################################################################
 

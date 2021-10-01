@@ -11,20 +11,17 @@ import { currentTimeStamp } from "../lib/util/currentTimeStamp";
 export const User = list({
   access: {
     filter: {
-      query: accessControls.filterLevel.canManageUsers,
-      update: accessControls.filterLevel.canManageUsers,
+      query: accessControls.filterLevel.canQueryUsers,
+      update: accessControls.filterLevel.canCRUDUsers,
     },
   },
   fields: {
     email: text({ isRequired: true, isIndexed: "unique", isFilterable: true }),
     password: password({ isRequired: true }),
     name: text({ isRequired: true }),
-    role: relationship({ ref: "Role.assignedTo" }),
-    createdAt: timestamp({
-      defaultValue: currentTimeStamp,
-      isRequired: true,
-      isFilterable: true,
-    }),
+    address: relationship({ ref: "Address.user" }),
+    role: relationship({ ref: "Role.user" }),
+    createdAt: timestamp({ defaultValue: currentTimeStamp, isRequired: true }),
     modifiedAt: timestamp({ defaultValue: currentTimeStamp, isRequired: true }),
   },
   ui: {

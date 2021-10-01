@@ -27,6 +27,15 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
+  createAddress(data: AddressCreateInput!): Address
+  createAddresses(data: [AddressCreateInput!]!): [Address]
+  updateAddress(
+    where: AddressWhereUniqueInput!
+    data: AddressUpdateInput!
+  ): Address
+  updateAddresses(data: [AddressUpdateArgs!]!): [Address]
+  deleteAddress(where: AddressWhereUniqueInput!): Address
+  deleteAddresses(where: [AddressWhereUniqueInput!]!): [Address]
   endSession: Boolean!
 }
 
@@ -57,19 +66,19 @@ enum PasswordAuthErrorCode {
 type Role {
   id: ID!
   name: String
-  canManageProducts: Boolean
-  canSeeOtherUsers: Boolean
-  canManageUsers: Boolean
-  canManageRoles: Boolean
-  canManageCart: Boolean
-  canManageOrders: Boolean
-  assignedTo(
+  canCRUDProducts: Boolean
+  canQueryUsers: Boolean
+  canCRUDUsers: Boolean
+  canCRUDRoles: Boolean
+  canCRUDCart: Boolean
+  canCRUDOrders: Boolean
+  user(
     where: UserWhereInput! = {}
     orderBy: [UserOrderByInput!]! = []
     take: Int
     skip: Int! = 0
   ): [User!]
-  assignedToCount(where: UserWhereInput! = {}): Int
+  userCount(where: UserWhereInput! = {}): Int
 }
 
 input RoleWhereUniqueInput {
@@ -105,13 +114,13 @@ enum OrderDirection {
 
 input RoleUpdateInput {
   name: String
-  canManageProducts: Boolean
-  canSeeOtherUsers: Boolean
-  canManageUsers: Boolean
-  canManageRoles: Boolean
-  canManageCart: Boolean
-  canManageOrders: Boolean
-  assignedTo: UserRelateToManyForUpdateInput
+  canCRUDProducts: Boolean
+  canQueryUsers: Boolean
+  canCRUDUsers: Boolean
+  canCRUDRoles: Boolean
+  canCRUDCart: Boolean
+  canCRUDOrders: Boolean
+  user: UserRelateToManyForUpdateInput
 }
 
 input UserRelateToManyForUpdateInput {
@@ -128,13 +137,13 @@ input RoleUpdateArgs {
 
 input RoleCreateInput {
   name: String
-  canManageProducts: Boolean
-  canSeeOtherUsers: Boolean
-  canManageUsers: Boolean
-  canManageRoles: Boolean
-  canManageCart: Boolean
-  canManageOrders: Boolean
-  assignedTo: UserRelateToManyForCreateInput
+  canCRUDProducts: Boolean
+  canQueryUsers: Boolean
+  canCRUDUsers: Boolean
+  canCRUDRoles: Boolean
+  canCRUDCart: Boolean
+  canCRUDOrders: Boolean
+  user: UserRelateToManyForCreateInput
 }
 
 input UserRelateToManyForCreateInput {
@@ -147,6 +156,7 @@ type User {
   email: String
   password: PasswordState
   name: String
+  address: Address
   role: Role
   createdAt: String
   modifiedAt: String
@@ -167,7 +177,6 @@ input UserWhereInput {
   NOT: [UserWhereInput!]
   id: IDFilter
   email: StringNullableFilter
-  createdAt: DateTimeNullableFilter
 }
 
 input StringNullableFilter {
@@ -204,17 +213,6 @@ input NestedStringNullableFilter {
   not: NestedStringNullableFilter
 }
 
-input DateTimeNullableFilter {
-  equals: String
-  in: [String!]
-  notIn: [String!]
-  lt: String
-  lte: String
-  gt: String
-  gte: String
-  not: DateTimeNullableFilter
-}
-
 input UserOrderByInput {
   id: OrderDirection
 }
@@ -223,9 +221,16 @@ input UserUpdateInput {
   email: String
   password: String
   name: String
+  address: AddressRelateToOneForUpdateInput
   role: RoleRelateToOneForUpdateInput
   createdAt: String
   modifiedAt: String
+}
+
+input AddressRelateToOneForUpdateInput {
+  create: AddressCreateInput
+  connect: AddressWhereUniqueInput
+  disconnect: Boolean
 }
 
 input RoleRelateToOneForUpdateInput {
@@ -243,14 +248,79 @@ input UserCreateInput {
   email: String
   password: String
   name: String
+  address: AddressRelateToOneForCreateInput
   role: RoleRelateToOneForCreateInput
   createdAt: String
   modifiedAt: String
 }
 
+input AddressRelateToOneForCreateInput {
+  create: AddressCreateInput
+  connect: AddressWhereUniqueInput
+}
+
 input RoleRelateToOneForCreateInput {
   create: RoleCreateInput
   connect: RoleWhereUniqueInput
+}
+
+type Address {
+  id: ID!
+  address: String
+  mobileNumber: String
+  pincode: String
+  city: String
+  state: String
+  user: User
+}
+
+input AddressWhereUniqueInput {
+  id: ID
+}
+
+input AddressWhereInput {
+  AND: [AddressWhereInput!]
+  OR: [AddressWhereInput!]
+  NOT: [AddressWhereInput!]
+  id: IDFilter
+}
+
+input AddressOrderByInput {
+  id: OrderDirection
+}
+
+input AddressUpdateInput {
+  address: String
+  mobileNumber: String
+  pincode: String
+  city: String
+  state: String
+  user: UserRelateToOneForUpdateInput
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
+}
+
+input AddressUpdateArgs {
+  where: AddressWhereUniqueInput!
+  data: AddressUpdateInput!
+}
+
+input AddressCreateInput {
+  address: String
+  mobileNumber: String
+  pincode: String
+  city: String
+  state: String
+  user: UserRelateToOneForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 """
@@ -279,6 +349,14 @@ type Query {
   ): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
+  addresses(
+    where: AddressWhereInput! = {}
+    orderBy: [AddressOrderByInput!]! = []
+    take: Int
+    skip: Int! = 0
+  ): [Address!]
+  address(where: AddressWhereUniqueInput!): Address
+  addressesCount(where: AddressWhereInput! = {}): Int
   keystone: KeystoneMeta!
 }
 
