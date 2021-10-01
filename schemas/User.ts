@@ -4,7 +4,6 @@ import {
   relationship,
   text,
   timestamp,
-  virtual,
 } from "@keystone-next/keystone/fields";
 import { accessControls } from "../access";
 import { currentTimeStamp } from "../lib/util/currentTimeStamp";
@@ -21,7 +20,11 @@ export const User = list({
     password: password({ isRequired: true }),
     name: text({ isRequired: true }),
     role: relationship({ ref: "Role.assignedTo" }),
-    createdAt: timestamp({ defaultValue: currentTimeStamp, isRequired: true }),
+    createdAt: timestamp({
+      defaultValue: currentTimeStamp,
+      isRequired: true,
+      isFilterable: true,
+    }),
     modifiedAt: timestamp({ defaultValue: currentTimeStamp, isRequired: true }),
   },
   ui: {

@@ -1,4 +1,4 @@
-import { permissionList } from "./schema/fields/permissionFields";
+import { permissionList } from "./schemas/fields/permissionFields";
 import { ListAccessArgs, PermissionName } from "./types";
 
 //==============  TYPES =====================

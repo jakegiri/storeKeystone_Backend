@@ -1,5 +1,5 @@
 import { createAuth } from "@keystone-next/auth";
-import { permissionList } from "./schema/fields/permissionFields";
+import { permissionList } from "./schemas/fields/permissionFields";
 
 let sessionSecret = process.env.SESSION_SECRET;
 

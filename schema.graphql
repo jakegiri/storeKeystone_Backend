@@ -167,6 +167,7 @@ input UserWhereInput {
   NOT: [UserWhereInput!]
   id: IDFilter
   email: StringNullableFilter
+  createdAt: DateTimeNullableFilter
 }
 
 input StringNullableFilter {
@@ -201,6 +202,17 @@ input NestedStringNullableFilter {
   startsWith: String
   endsWith: String
   not: NestedStringNullableFilter
+}
+
+input DateTimeNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  not: DateTimeNullableFilter
 }
 
 input UserOrderByInput {
