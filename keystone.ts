@@ -1,5 +1,6 @@
 import { config } from "@keystone-next/keystone";
 import { statelessSessions } from "@keystone-next/keystone/session";
+import "dotenv/config";
 
 import { lists } from "./schema";
 import { withAuth, sessionSecret } from "./auth";
@@ -13,6 +14,12 @@ const session = statelessSessions({
 
 export default withAuth(
   config({
+    server: {
+      cors: {
+        origin: [process.env.FRONTEND_URL!],
+        credentials: true,
+      },
+    },
     db: {
       provider: "postgresql",
       url:
