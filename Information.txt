@@ -1,0 +1,18 @@
+roles And permissions
+  -- Admin
+    -- can CRUD users, products, carts, etc
+  -- Moderator
+    -- can query all users, products, carts, etc
+    -- cannot CRUD other users, products, carts etc
+
+
+
+####################################
+######  current doing ###############
+#####################################
+
+-- user_merchant_mapping table/list
+-- merchant table/list
+-- merchant_product_mapping
+
+why mapping_through_id is preffereed? is it efficient? does it solve any inefficiency?

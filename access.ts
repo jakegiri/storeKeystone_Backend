@@ -30,20 +30,19 @@ class AccessControls {
       // Is Signed In?
       if (!this.isSignedIn({ session })) return false;
 
-      //Do they have permission to CRUD users?
-      if (this.operationLevel.canCRUDUsers({ session })) return true;
-
-      // Do they have permission to query users ?
-      if (this.operationLevel.canQueryUsers({ session })) return true;
+      //Do they have permission to CRUD or Query users?
+      if (
+        this.operationLevel.canCRUDUsers({ session }) ||
+        this.operationLevel.canQueryUsers({ session })
+      ) {
+        return true;
+      }
 
       // If not, do they own this item ?
       return { id: { equals: session?.itemId } };
     },
     canCRUDUsers: ({ session }: ListAccessArgs) => {
-      // Is Signed In?
-      if (!this.isSignedIn({ session })) return false;
-
-      // Do they have permission to manageRole?
+      // Do they have permission to CRUD users?
       if (this.operationLevel.canCRUDUsers({ session })) return true;
 
       // IF not , do they own this item?

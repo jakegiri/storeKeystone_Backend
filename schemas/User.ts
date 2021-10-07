@@ -10,9 +10,13 @@ import { currentTimeStamp } from "../lib/util/currentTimeStamp";
 
 export const User = list({
   access: {
-    filter: {
-      query: accessControls.filterLevel.canQueryUsers,
-      update: accessControls.filterLevel.canCRUDUsers,
+    operation: {
+      query:
+        accessControls.operationLevel.canCRUDUsers ||
+        accessControls.operationLevel.canQueryUsers,
+      create: accessControls.operationLevel.canCRUDUsers,
+      update: accessControls.operationLevel.canCRUDUsers,
+      delete: accessControls.operationLevel.canCRUDUsers,
     },
   },
   fields: {

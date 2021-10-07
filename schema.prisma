@@ -12,15 +12,21 @@ generator client {
 }
 
 model Role {
-  id              String   @id @default(cuid())
-  name            String?
-  canCRUDProducts Boolean?
-  canQueryUsers   Boolean?
-  canCRUDUsers    Boolean?
-  canCRUDRoles    Boolean?
-  canCRUDCart     Boolean?
-  canCRUDOrders   Boolean?
-  user            User[]   @relation("User_role")
+  id                String   @id @default(cuid())
+  name              String?
+  canQueryUsers     Boolean?
+  canCRUDUsers      Boolean?
+  canDeleteUsers    Boolean?
+  canQueryProducts  Boolean?
+  canCRUDProducts   Boolean?
+  canDeleteProducts Boolean?
+  canQueryCart      Boolean?
+  canCRUDCart       Boolean?
+  canDeleteCart     Boolean?
+  canQueryOrders    Boolean?
+  canCRUDOrders     Boolean?
+  canCRUDRoles      Boolean?
+  user              User[]   @relation("User_role")
 }
 
 model User {
@@ -46,4 +52,52 @@ model Address {
   state        String?
   user         User?   @relation("Address_user", fields: [userId], references: [id])
   userId       String? @unique @map("user")
+}
+
+model Product {
+  id          String            @id @default(cuid())
+  name        String?
+  description String?
+  price       String?
+  catagory    ProductCatagory[] @relation("Product_catagory_ProductCatagory_product")
+  inventory   ProductInventory? @relation("Product_inventory", fields: [inventoryId], references: [id])
+  inventoryId String?           @unique @map("inventory")
+  discount    ProductDiscount?  @relation("Product_discount", fields: [discountId], references: [id])
+  discountId  String?           @map("discount")
+  createdAt   DateTime?
+  modifiedAt  DateTime?
+  deletedAt   DateTime?
+
+  @@index([discountId])
+}
+
+model ProductCatagory {
+  id          String    @id @default(cuid())
+  name        String?
+  description String?
+  product     Product[] @relation("Product_catagory_ProductCatagory_product")
+  createdAt   DateTime?
+  modifiedAt  String?
+  deletedAt   String?
+}
+
+model ProductInventory {
+  id         String    @id @default(cuid())
+  quantity   String?
+  product    Product?  @relation("Product_inventory")
+  createdAt  DateTime?
+  modifiedAt DateTime?
+  deletedAt  DateTime?
+}
+
+model ProductDiscount {
+  id              String    @id @default(cuid())
+  name            String?
+  description     String?
+  discountPercent String?
+  active          Boolean?
+  product         Product[] @relation("Product_discount")
+  createdAt       DateTime?
+  modifiedAt      DateTime?
+  deletedAt       DateTime?
 }
